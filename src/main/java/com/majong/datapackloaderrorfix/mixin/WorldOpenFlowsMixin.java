@@ -11,19 +11,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.majong.datapackloaderrorfix.Fix;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.worldselection.WorldOpenFlows;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.level.storage.LevelStorageSource;
 
-@Mixin(Minecraft.class)
-public class MinecraftMixin {
+@Mixin(WorldOpenFlows.class)
+public class WorldOpenFlowsMixin {
 	@Shadow
 	LevelStorageSource levelSource;
-	@Inject(at=@At("HEAD"),method="loadLevel")
-	public void readAdditionalSaveData(String p_91201_,CallbackInfo callbackInfo) {
-		 try {
-			LevelStorageSource.LevelStorageAccess levelstorageaccess= this.levelSource.createAccess(p_91201_);
-			File savefile=levelstorageaccess.getWorldDir().toFile();
-			File levelfile=new File(savefile,"level.dat");
+	@Inject(at=@At("HEAD"),method="doLoadLevel")
+	public void doLoadLevel(Screen p_233146_, String p_233147_, boolean p_233148_, boolean p_233149_,CallbackInfo callbackInfo) {
+		try {
+			LevelStorageSource.LevelStorageAccess levelstorageaccess= this.levelSource.createAccess(p_233147_);
+			File levelfile=levelstorageaccess.getLevelPath(LevelResource.LEVEL_DATA_FILE).toFile();
 			levelstorageaccess.close();
 			Fix.fix(levelfile);
 		} catch (IOException e) {

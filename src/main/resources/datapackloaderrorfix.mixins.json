@@ -4,6 +4,6 @@
 	"package": "com.majong.datapackloaderrorfix.mixin",
 	"refmap": "datapackloaderrorfix.refmap.json",
 	"client": [
-		"MinecraftMixin"
+		"WorldOpenFlowsMixin"
 	]
 }
